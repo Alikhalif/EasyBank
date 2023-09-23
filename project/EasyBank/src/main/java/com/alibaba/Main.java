@@ -49,7 +49,7 @@ public class Main {
                     break;
 
                 case 2 :
-                    System.out.println("read members");
+                    System.out.println("read Employees");
                     empc.AllEmployee();
                     break;
 
@@ -59,6 +59,7 @@ public class Main {
 
                 case 4 :
                     System.out.println("****************** delete Member");
+                    empc.deleteEmployee();
                     break;
 
                 case 5 :

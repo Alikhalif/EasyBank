@@ -9,6 +9,7 @@ import com.alibaba.service.EmployeeDAOImpl;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -57,5 +58,20 @@ public class EmployeeController {
         for(Employee employee : employeeList){
             System.out.println(employee.getMatricule()+" | "+employee.getFirstName()+" | "+employee.getLastName()+" | "+employee.getDateOfBirth()+" | "+employee.getEmail()+" | "+employee.getPhoneNumber()+" | "+employee.getAddress()+" | "+employee.getDateOfRecruitment());
         }
+    }
+
+    public void deleteEmployee(){
+        AllEmployee();
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the matricule of the employee to delete: ");
+        int matricule = sc.nextInt();
+
+        //seremp.deleteEmployee(matricule);
+        if (seremp.deleteEmployee(matricule)) {
+            System.out.println("Employee deleted successfully");
+        } else {
+            System.out.println("Employee not deleted");
+        }
+
     }
 }

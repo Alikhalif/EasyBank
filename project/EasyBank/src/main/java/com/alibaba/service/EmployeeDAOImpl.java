@@ -1,5 +1,4 @@
 package com.alibaba.service;
-
 import com.alibaba.connection.DB;
 import com.alibaba.dao.EmployeeDAO;
 import com.alibaba.entities.Employee;
@@ -67,11 +66,35 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public void updateEmployee(Employee employee) {
-        // Implement the logic to update an employee in the database
+        try{
+            String sql = "UPDATE employees SET firstName=?, lastName=?, birthDate=?, email=?, phone=?, address=?, recruitmentDate=? WHERE matricule = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, emp.getFirstName());
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override
-    public void deleteEmployee(String matricule) {
-        // Implement the logic to delete an employee from the database
+    public Boolean deleteEmployee(int matricule) {
+        try {
+            String sql = "DELETE FROM employees WHERE matricule = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, matricule);
+            int affectedRows = preparedStatement.executeUpdate();
+
+            System.out.println("Number of affected rows: " + affectedRows);
+
+            if(affectedRows > 0){
+                return true;
+            }else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -9,5 +9,5 @@ public interface EmployeeDAO {
     Employee getEmployeeByMatricule(String matricule);
     List<Employee> getAllEmployees();
     void updateEmployee(Employee employee);
-    void deleteEmployee(String matricule);
+    Boolean deleteEmployee(int matricule);
 }
