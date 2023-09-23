@@ -1,16 +1,17 @@
 package com.alibaba.entities;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class Employee extends Person {
     private int matricule;
-    private Date dateOfRecruitment;
+    private LocalDate dateOfRecruitment;
     private List<Mission> missions;
     private List<Operation> operations;
     private List<Account> accounts;
 
-    public Employee(String firstName, String lastName, Date dateOfBirth, String email, String phoneNumber, String address, int matricule, Date dateOfRecruitment, List<Mission> missions, List<Operation> operations, List<Account> accounts) {
+    public Employee(String firstName, String lastName, LocalDate dateOfBirth, String email, String phoneNumber, String address, int matricule, LocalDate dateOfRecruitment, List<Mission> missions, List<Operation> operations, List<Account> accounts) {
         super(firstName, lastName, dateOfBirth, email, phoneNumber, address);
         this.matricule = matricule;
         this.dateOfRecruitment = dateOfRecruitment;
@@ -31,11 +32,11 @@ public class Employee extends Person {
         this.matricule = matricule;
     }
 
-    public Date getDateOfRecruitment() {
+    public LocalDate getDateOfRecruitment() {
         return dateOfRecruitment;
     }
 
-    public void setDateOfRecruitment(Date dateOfRecruitment) {
+    public void setDateOfRecruitment(LocalDate dateOfRecruitment) {
         this.dateOfRecruitment = dateOfRecruitment;
     }
 

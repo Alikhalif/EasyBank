@@ -1,16 +1,16 @@
 package com.alibaba.entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Person {
     private String firstName;
     private String lastName;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
     private String email;
     private String phoneNumber;
     private String address;
 
-    public Person(String firstName, String lastName, Date dateOfBirth, String email, String phoneNumber, String address) {
+    public Person(String firstName, String lastName, LocalDate dateOfBirth, String email, String phoneNumber, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
@@ -39,11 +39,11 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

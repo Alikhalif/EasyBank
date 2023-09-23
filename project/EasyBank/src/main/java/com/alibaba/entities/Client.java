@@ -1,13 +1,13 @@
 package com.alibaba.entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class Client extends Person{
     private int code;
     private List<Account> accounts;
 
-    public Client(String firstName, String lastName, Date dateOfBirth, String email, String phoneNumber, String address, int code, List<Account> accounts) {
+    public Client(String firstName, String lastName, LocalDate dateOfBirth, String email, String phoneNumber, String address, int code, List<Account> accounts) {
         super(firstName, lastName, dateOfBirth, email, phoneNumber, address);
         this.code = code;
         this.accounts = accounts;

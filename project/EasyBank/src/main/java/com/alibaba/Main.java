@@ -1,5 +1,7 @@
 package com.alibaba;
 import com.alibaba.connection.DB;
+import com.alibaba.controller.EmployeeController;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -8,6 +10,8 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args){
+//        DB.getConnection();
+        EmployeeController empc = new EmployeeController();
 
         int choice;
 
@@ -16,15 +20,15 @@ public class Main {
 
             System.out.println("******** welcome to EasyBank app ********\n" +
 
-                    "1  - Add Member : \n" +
-                    "2  - Read List Member : \n" +
-                    "3  - Update Member : \n" +
-                    "4  - Delete Member : \n" +
+                    "1  - Add Employee : \n" +
+                    "2  - Read List Employee : \n" +
+                    "3  - Update Employee : \n" +
+                    "4  - Delete Employee : \n" +
 
-                    "5  - Add Book : \n" +
-                    "6  - Read List Books : \n" +
-                    "7  - Delete Book : \n" +
-                    "8  - Update  Book : \n" +
+                    "5  - Add Client : \n" +
+                    "6  - Read List Clients : \n" +
+                    "7  - Delete Client : \n" +
+                    "8  - Update  Client : \n" +
                     "9  - Read book by status disponible : \n" +
                     "10 - Read book by status Borrowe : \n" +
                     "11 - Search for Book : \n" +
@@ -40,11 +44,13 @@ public class Main {
 
             switch (choice){
                 case 1 :
-                    System.out.println("add member");
+                    System.out.println("Add Employee");
+                    empc.addEmployee();
                     break;
 
                 case 2 :
                     System.out.println("read members");
+                    empc.AllEmployee();
                     break;
 
                 case 3 :
