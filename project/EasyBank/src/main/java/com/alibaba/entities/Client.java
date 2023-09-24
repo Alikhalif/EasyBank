@@ -5,11 +5,13 @@ import java.util.List;
 
 public class Client extends Person{
     private int code;
+    private Employee employee;
     private List<Account> accounts;
 
-    public Client(String firstName, String lastName, LocalDate dateOfBirth, String email, String phoneNumber, String address, int code, List<Account> accounts) {
+    public Client(String firstName, String lastName, LocalDate dateOfBirth, String email, String phoneNumber, String address, int code, Employee employee, List<Account> accounts) {
         super(firstName, lastName, dateOfBirth, email, phoneNumber, address);
         this.code = code;
+        this.employee = employee;
         this.accounts = accounts;
     }
 
@@ -23,6 +25,14 @@ public class Client extends Person{
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public Employee getEmployee(){
+        return employee;
+    }
+
+    public void setEmployee(Employee employee){
+        this.employee = employee;
     }
 
     public List<Account> getAccounts() {

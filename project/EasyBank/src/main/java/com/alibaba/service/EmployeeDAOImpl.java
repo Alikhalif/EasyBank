@@ -4,6 +4,7 @@ import com.alibaba.dao.EmployeeDAO;
 import com.alibaba.entities.Employee;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +34,30 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public Employee getEmployeeByMatricule(String matricule) {
+    public Employee getEmployeeByMatricule(int matricule) {
+        try{
+            String sql = "SELECT * FROM employees WHERE matricule = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,matricule);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                int matricul = resultSet.getInt("matricule");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                LocalDate birthDate = resultSet.getDate("birthDate").toLocalDate();
+                String email = resultSet.getString("email");
+                String phoneNumber = resultSet.getString("phone");
+                String address = resultSet.getString("address");
+                LocalDate recruitmentDate = resultSet.getDate("recruitmentDate").toLocalDate();
+
+                // Create and return an Employee object
+                return new Employee(firstName, lastName, birthDate, email, phoneNumber, address, matricul, recruitmentDate, null, null, null);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
         return null;
-        // Implement the logic to retrieve an employee by matricule from the database
     }
 
     @Override
@@ -66,16 +88,26 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public void updateEmployee(Employee employee) {
-        try{
+        try {
             String sql = "UPDATE employees SET firstName=?, lastName=?, birthDate=?, email=?, phone=?, address=?, recruitmentDate=? WHERE matricule = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, emp.getFirstName());
-        }catch (SQLException e){
+            preparedStatement.setString(1, employee.getFirstName());
+            preparedStatement.setString(2, employee.getLastName());
+            preparedStatement.setDate(3, java.sql.Date.valueOf(employee.getDateOfBirth()));
+            preparedStatement.setString(4, employee.getEmail());
+            preparedStatement.setString(5, employee.getPhoneNumber());
+            preparedStatement.setString(6, employee.getAddress());
+            preparedStatement.setDate(7, java.sql.Date.valueOf(employee.getDateOfRecruitment()));
+            preparedStatement.setInt(8, employee.getMatricule());  // Corrected position
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
+
 
     @Override
     public Boolean deleteEmployee(int matricule) {

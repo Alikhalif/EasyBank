@@ -1,5 +1,6 @@
 package com.alibaba;
 import com.alibaba.connection.DB;
+import com.alibaba.controller.ClientController;
 import com.alibaba.controller.EmployeeController;
 
 import java.sql.Connection;
@@ -12,6 +13,7 @@ public class Main {
     public static void main(String[] args){
 //        DB.getConnection();
         EmployeeController empc = new EmployeeController();
+        ClientController cltc = new ClientController();
 
         int choice;
 
@@ -54,16 +56,18 @@ public class Main {
                     break;
 
                 case 3 :
-                    System.out.println("Update member");
+                    System.out.println("Update Employee");
+                    empc.updateEmployee();
                     break;
 
                 case 4 :
-                    System.out.println("****************** delete Member");
+                    System.out.println("****************** delete Employee");
                     empc.deleteEmployee();
                     break;
 
                 case 5 :
-                    System.out.println("****************** Add book");
+                    System.out.println("****************** Add Client");
+                    cltc.addClient();
                     break;
 
                 case 6 :

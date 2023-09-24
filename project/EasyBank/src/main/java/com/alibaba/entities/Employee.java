@@ -1,7 +1,6 @@
 package com.alibaba.entities;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 public class Employee extends Person {
