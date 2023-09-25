@@ -3,10 +3,12 @@ package com.alibaba.entities;
 import java.util.Date;
 
 public class Account {
-    private int accountNumber;
-    private double balance;
-    private Date creationDate;
-    private AccountStatus status;
+    protected int accountNumber;
+    protected double balance;
+    protected Date creationDate;
+    protected AccountStatus status;
+
+    //////
 
     public Account(int accountNumber, double balance, Date creationDate, AccountStatus status) {
         this.accountNumber = accountNumber;

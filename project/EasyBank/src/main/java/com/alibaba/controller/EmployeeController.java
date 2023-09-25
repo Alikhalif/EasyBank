@@ -109,6 +109,7 @@ public class EmployeeController {
             emp.setEmail(email);
             emp.setPhoneNumber(phoneNumber);
             emp.setAddress(address);
+            emp.setMatricule(employee.getMatricule());
             emp.setDateOfRecruitment(dateOfRecruitmentpars);
 
 

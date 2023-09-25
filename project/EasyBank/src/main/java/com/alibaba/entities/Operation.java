@@ -6,6 +6,67 @@ public class Operation {
     private int operationNumber;
     private Date creationDate;
     private Double amount;
-    private Operation operation;
+    private Employee employee;
     private Account account;
+
+    public Operation(int operationNumber, Date creationDate, Double amount, Employee employee, Account account) {
+        this.operationNumber = operationNumber;
+        this.creationDate = creationDate;
+        this.amount = amount;
+        this.employee = employee;
+        this.account = account;
+    }
+
+    public int getOperationNumber() {
+        return operationNumber;
+    }
+
+    public void setOperationNumber(int operationNumber) {
+        this.operationNumber = operationNumber;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Operation{" +
+                "operationNumber=" + operationNumber +
+                ", creationDate=" + creationDate +
+                ", amount=" + amount +
+                ", employee=" + employee +
+                ", account=" + account +
+                '}';
+    }
+
 }

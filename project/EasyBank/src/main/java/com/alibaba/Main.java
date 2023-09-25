@@ -31,7 +31,7 @@ public class Main {
                     "6  - Read List Clients : \n" +
                     "7  - Delete Client : \n" +
                     "8  - Update  Client : \n" +
-                    "9  - Read book by status disponible : \n" +
+                    "9  - Search Client by Code : \n" +
                     "10 - Read book by status Borrowe : \n" +
                     "11 - Search for Book : \n" +
                     "12 - Borrowe Book : \n" +
@@ -71,19 +71,23 @@ public class Main {
                     break;
 
                 case 6 :
-                    System.out.println("****************** Read books");
+                    System.out.println("****************** Read All Clients");
+                    cltc.getAllClient();
                     break;
 
                 case 7 :
-                    System.out.println("****************** delete book");
+                    System.out.println("****************** delete Client");
+                    cltc.deleteClient();
                     break;
 
                 case 8 :
-                    System.out.println("****************** update book");
+                    System.out.println("****************** update Client");
+                    cltc.updateEmployee();
                     break;
 
                 case 9 :
-                    System.out.println("****************** Read book disponible");
+                    System.out.println("****************** Search client by code");
+                    cltc.getClientByCode();
                     break;
 
                 case 10 :

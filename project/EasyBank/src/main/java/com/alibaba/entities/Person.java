@@ -2,13 +2,13 @@ package com.alibaba.entities;
 
 import java.time.LocalDate;
 
-public class Person {
-    private String firstName;
-    private String lastName;
-    private LocalDate dateOfBirth;
-    private String email;
-    private String phoneNumber;
-    private String address;
+public abstract class Person {
+    protected String firstName;
+    protected String lastName;
+    protected LocalDate dateOfBirth;
+    protected String email;
+    protected String phoneNumber;
+    protected String address;
 
     public Person(String firstName, String lastName, LocalDate dateOfBirth, String email, String phoneNumber, String address) {
         this.firstName = firstName;
