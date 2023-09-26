@@ -5,6 +5,7 @@ import com.alibaba.entities.CheckingAccount;
 
 public interface AccountDAO {
     void createAccountChecking(Account account);
+    void createAccountSavinge(Account account);
     Account getAccount(int accountNumber);
     void updateAccount(Account account);
     void deleteAccount(int accountNumber);

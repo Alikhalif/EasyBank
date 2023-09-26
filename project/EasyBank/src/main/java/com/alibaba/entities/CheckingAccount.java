@@ -1,12 +1,16 @@
 package com.alibaba.entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class CheckingAccount extends Account{
     private double overdraftLimit;
 
-    public CheckingAccount(int accountNumber, double balance, Date creationDate, AccountStatus status, double overdraftLimit) {
-        super(accountNumber, balance, creationDate, status);
+    public  CheckingAccount(){
+
+    }
+
+    public CheckingAccount(int accountNumber, double balance, LocalDate creationDate, AccountStatus status, Client client, Employee employee, double overdraftLimit) {
+        super(accountNumber, balance, creationDate, status, client, employee);
         this.overdraftLimit = overdraftLimit;
     }
 

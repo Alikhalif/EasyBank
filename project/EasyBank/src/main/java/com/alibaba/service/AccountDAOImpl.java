@@ -4,10 +4,9 @@ import com.alibaba.connection.DB;
 import com.alibaba.dao.AccountDAO;
 import com.alibaba.entities.Account;
 import com.alibaba.entities.CheckingAccount;
+import com.alibaba.entities.SavingsAccount;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 public class AccountDAOImpl implements AccountDAO {
@@ -16,22 +15,70 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     public void createAccountChecking(Account account) {
-        String addAccountQuery = "INSERT INTO accounts (account_number, balance, creation_date, status) VALUES (?, ?, ?, ?)";
+        String addAccountQuery = "INSERT INTO accounts (balance, creationDate, status, clientCode, employeeMatricule) VALUES (?, ?, ?, ?, ?)";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(addAccountQuery)) {
-            preparedStatement.setInt(1, account.getAccountNumber());
-            preparedStatement.setDouble(2, account.getBalance());
-            preparedStatement.setDate(3, new java.sql.Date(account.getCreationDate().getTime()));
-            preparedStatement.setString(4, account.getStatus().toString());
+        try (PreparedStatement preparedStatement = connection.prepareStatement(addAccountQuery, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setDouble(1, account.getBalance());
+            preparedStatement.setDate(2, java.sql.Date.valueOf(account.getCreationDate()));
+            preparedStatement.setString(3, account.getStatus().toString());
+            preparedStatement.setInt(4, account.getClient().getCode());
+            preparedStatement.setInt(5, account.getEmployee().getMatricule());
+
             preparedStatement.executeUpdate();
+
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            int accountNumber = -1;
+            if (generatedKeys.next()) {
+                accountNumber = generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("Failed to retrieve auto-generated account number.");
+            }
 
 
             if (account instanceof CheckingAccount) {
                 CheckingAccount checkingAccount = (CheckingAccount) account;
-                String addCheckingAccountQuery = "INSERT INTO checking_accounts (account_number, overdraft_limit) VALUES (?, ?)";
+                String addCheckingAccountQuery = "INSERT INTO currentAccounts (accountNumber, overdraft_limit) VALUES (?, ?)";
                 try (PreparedStatement ps = connection.prepareStatement(addCheckingAccountQuery)) {
-                    ps.setInt(1, checkingAccount.getAccountNumber());
+                    ps.setInt(1, accountNumber);
                     ps.setDouble(2, checkingAccount.getOverdraftLimit());
+                    ps.executeUpdate();
+                } catch (SQLException e) {
+                    // Handle SQLException
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void createAccountSavinge(Account account) {
+        String addAccountQuery = "INSERT INTO accounts (balance, creationDate, status, clientCode, employeeMatricule) VALUES ( ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(addAccountQuery, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setDouble(1, account.getBalance());
+            preparedStatement.setDate(2, java.sql.Date.valueOf(account.getCreationDate()));
+            preparedStatement.setString(3, account.getStatus().toString());
+            preparedStatement.setInt(4, account.getClient().getCode());
+            preparedStatement.setInt(5, account.getEmployee().getMatricule());
+
+            preparedStatement.executeUpdate();
+
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            int accountNumber = -1;
+            if (generatedKeys.next()) {
+                accountNumber = generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("Failed to retrieve auto-generated account number.");
+            }
+
+            if (account instanceof SavingsAccount) {
+                SavingsAccount savingsAccount = (SavingsAccount) account;
+                String SQL = "INSERT INTO savingsAccounts (accountNumber, interestRate) VALUES (?, ?)";
+                try (PreparedStatement ps = connection.prepareStatement(SQL)) {
+                    ps.setInt(1, accountNumber);
+                    ps.setDouble(2, savingsAccount.getInterestRate());
                     ps.executeUpdate();
                 } catch (SQLException e) {
                     // Handle SQLException

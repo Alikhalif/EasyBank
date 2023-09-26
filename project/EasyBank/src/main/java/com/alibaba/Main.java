@@ -1,5 +1,6 @@
 package com.alibaba;
 import com.alibaba.connection.DB;
+import com.alibaba.controller.AccountController;
 import com.alibaba.controller.ClientController;
 import com.alibaba.controller.EmployeeController;
 
@@ -14,6 +15,7 @@ public class Main {
 //        DB.getConnection();
         EmployeeController empc = new EmployeeController();
         ClientController cltc = new ClientController();
+        AccountController accc = new AccountController();
 
         int choice;
 
@@ -91,7 +93,8 @@ public class Main {
                     break;
 
                 case 10 :
-                    System.out.println("****************** Read book by status Borrowe");
+                    System.out.println("****************** Add Account");
+                    accc.addAccount();
                     break;
 
                 case 11 :
