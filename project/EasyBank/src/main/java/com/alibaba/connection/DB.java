@@ -55,6 +55,7 @@ public class DB {
                 + "firstName VARCHAR(255),"
                 + "lastName VARCHAR(255),"
                 + "birthDate DATE,"
+                + "email VARCHAR(255),"
                 + "phone VARCHAR(255),"
                 + "address VARCHAR(255)"
                 + ");";
@@ -83,7 +84,7 @@ public class DB {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS savingsAccounts ("
                 + "accountNumber INT PRIMARY KEY,"
                 + "interestRate DOUBLE PRECISION,"
-                + "FOREIGN KEY (accountNumber) REFERENCES accounts(accountNumber)"
+                + "FOREIGN KEY (accountNumber) REFERENCES accounts(accountNumber) ON DELETE CASCADE ON UPDATE CASCADE"
                 + ");";
         try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(createTableSQL);
@@ -94,7 +95,7 @@ public class DB {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS currentAccounts ("
                 + "accountNumber INT PRIMARY KEY,"
                 + "overdraft DOUBLE PRECISION,"
-                + "FOREIGN KEY (accountNumber) REFERENCES accounts(accountNumber)"
+                + "FOREIGN KEY (accountNumber) REFERENCES accounts(accountNumber) ON DELETE CASCADE ON UPDATE CASCADE"
                 + ");";
         try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(createTableSQL);

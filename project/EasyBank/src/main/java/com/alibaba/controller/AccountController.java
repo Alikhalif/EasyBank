@@ -7,6 +7,8 @@ import com.alibaba.service.EmployeeDAOImpl;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class AccountController {
@@ -63,11 +65,11 @@ public class AccountController {
         account.setCreationDate(creationDateprs);
         account.setStatus(AccountStatus.valueOf(sts));
 
-        Client client = new Client();  // Initialize the Client object
+        Client client = new Client();
         client.setCode(codeC);
-        account.setClient(client);  // Set the Client object for the account
+        account.setClient(client);
 
-        Employee employee = new Employee();  // Initialize the Employee object
+        Employee employee = new Employee();
         employee.setMatricule(matriculeEmp);
         account.setEmployee(employee);
 
@@ -104,11 +106,195 @@ public class AccountController {
             checkingAccount.setOverdraftLimit(overdraft);
             seracc.createAccountChecking(checkingAccount);
         }
+    }
+
+    public void deleteAccount(){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the number of the account to delete: ");
+        int number = sc.nextInt();
+
+        if (seracc.deleteAccount(number)) {
+            System.out.println("Employee deleted successfully");
+        } else {
+            System.out.println("Employee not deleted");
+        }
+    }
+
+    public void AllAccount(){
+        List<Account> accounts = seracc.getAllAccount();
+        for(Account account1 : accounts){
+            System.out.println(account1.getAccountNumber()+" | "+account1.getBalance()+" | "+account1.getCreationDate()+" | "+account1.getStatus()+" | "+account1.getClient().getCode()+" | "+account1.getEmployee().getMatricule());
+        }
+    }
+
+    public void getAccountByNum(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter Number Account");
+        int num = sc.nextInt();
+        Account account = seracc.getAccountByNumber(num);
+
+        if (account != null) {
+            System.out.println("Client found:");
+            System.out.println("Number account" + account.getAccountNumber());
+            System.out.println("Balance: " + account.getBalance());
+            System.out.println("Date creation: " + account.getCreationDate());
+            System.out.println("Status: " + account.getStatus());
+            System.out.println("Code client: " + account.getClient().getCode());
+            System.out.println("Matricule : " + account.getEmployee().getMatricule());
+        } else {
+            System.out.println("Account not found for numero: " + num);
+        }
+    }
 
 
+    public void updateStatusAccount(){
+        Scanner sc = new Scanner(System.in);
+        int num = sc.nextInt();
+        if (seracc.getAccountByNumber(num) != null){
+            System.out.println("Enter your choice \n" +
+                    "1 - active\n" +
+                    "2 - inactive \n" +
+                    "3 - blocked\n");
+            int choice = sc.nextInt();
+            if(choice == 1){
+                account.setStatus(AccountStatus.ACTIVE);
+            }else if(choice == 2){
+                account.setStatus(AccountStatus.INACTIVE);
+            }else if(choice == 3){
+                account.setStatus(AccountStatus.BLOCKED);
+            }else {
+                System.out.println("Enter number correct !");
+            }
+
+            account.setAccountNumber(num);
+            seracc.updateAccountByStatus(account);
 
 
+        }
+    }
 
+
+    public void searchByClientCode(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter Code Client : ");
+        int code = sc.nextInt();
+        Account account = seracc.getAccountByClient(code);
+
+        if (account != null) {
+            System.out.println("Client found:");
+            System.out.println("Number account" + account.getAccountNumber());
+            System.out.println("Balance: " + account.getBalance());
+            System.out.println("Date creation: " + account.getCreationDate());
+            System.out.println("Status: " + account.getStatus());
+            System.out.println("Code client: " + account.getClient().getCode());
+            System.out.println("Matricule : " + account.getEmployee().getMatricule());
+        } else {
+            System.out.println("Account not found for numero: " + code);
+        }
+    }
+
+
+    public void AllAccountByStatus(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter your choice \n" +
+                "1 - active\n" +
+                "2 - inactive \n" +
+                "3 - blocked\n");
+        int choice = sc.nextInt();
+        if(choice == 1){
+            account.setStatus(AccountStatus.ACTIVE);
+        }else if(choice == 2){
+            account.setStatus(AccountStatus.INACTIVE);
+        }else if(choice == 3){
+            account.setStatus(AccountStatus.BLOCKED);
+        }else {
+            System.out.println("Enter number correct !");
+        }
+        List<Account> accounts = seracc.getAccountsByStatus(account);
+        if(accounts != null){
+            for(Account account1 : accounts){
+                System.out.println(account1.getAccountNumber()+" | "+account1.getBalance()+" | "+account1.getCreationDate()+" | "+account1.getStatus()+" | "+account1.getClient().getCode()+" | "+account1.getEmployee().getMatricule());
+            }
+        }
+        else{
+            System.out.println("Not found");
+        }
+    }
+
+
+    public void getAccountByDatecreation(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter Date form yyyy-MM-dd");
+        String dateC = sc.next();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate creationDateprs = LocalDate.parse(dateC, formatter);
+
+        account.setCreationDate(creationDateprs);
+
+        List<Account> accounts = seracc.getAccountsByDateCreation(account);
+        if(accounts != null){
+            for(Account account1 : accounts){
+                System.out.println(account1.getAccountNumber()+" | "+account1.getBalance()+" | "+account1.getCreationDate()+" | "+account1.getStatus()+" | "+account1.getClient().getCode()+" | "+account1.getEmployee().getMatricule());
+            }
+        }
+        else{
+            System.out.println("Not found");
+        }
+    }
+
+
+    public Boolean checkOperation(Operation operation){
+        Account account = seracc.getAccountByNumber(operation.getAccount().getAccountNumber());
+        if (account != null){
+            System.out.println(account.getBalance());
+            System.out.println(operation.getAmount());
+            if (account.getBalance() >= operation.getAmount()){
+                Double newBalance = account.getBalance() - operation.getAmount();
+
+                Account account1 = new Account();
+                account1.setAccountNumber(account.getAccountNumber());
+                account1.setBalance(newBalance);
+                System.out.println(account1.getAccountNumber());
+                System.out.println(account1.getBalance());
+                if (seracc.updateAccountByBalance(account1)){
+                    System.out.println("Operation success");
+                    return true;
+                }
+
+            }
+            else {
+                System.out.println("ma3ndkch mataklch");
+            }
+        }
+        else {
+            System.out.println("account not found !");
+        }
+
+        return false;
+    }
+
+    public Boolean retraitOperation(Operation operation){
+        Account account = seracc.getAccountByNumber(operation.getAccount().getAccountNumber());
+        if (account != null){
+            System.out.println(account.getBalance());
+            System.out.println(operation.getAmount());
+
+            Double newBalance = account.getBalance() + operation.getAmount();
+
+            Account account1 = new Account();
+            account1.setAccountNumber(account.getAccountNumber());
+            account1.setBalance(newBalance);
+            if (seracc.updateAccountByBalance(account1)){
+                System.out.println("Operation success");
+                return true;
+            }
+        }
+        else {
+            System.out.println("account not found !");
+        }
+
+        return false;
     }
 
 }

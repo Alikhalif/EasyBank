@@ -1,4 +1,7 @@
 package com.alibaba.dao;
 
+import com.alibaba.entities.Operation;
+
 public interface OperationDAO {
+    void createOperation(Operation operation);
 }

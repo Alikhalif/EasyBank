@@ -2,16 +2,20 @@ package com.alibaba.service;
 
 import com.alibaba.connection.DB;
 import com.alibaba.dao.AccountDAO;
-import com.alibaba.entities.Account;
-import com.alibaba.entities.CheckingAccount;
-import com.alibaba.entities.SavingsAccount;
+import com.alibaba.entities.*;
+import jdk.jshell.Snippet;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 public class AccountDAOImpl implements AccountDAO {
 
     private Connection connection = DB.getConnection();
+    Account account = new Account();
 
     @Override
     public void createAccountChecking(Account account) {
@@ -37,7 +41,7 @@ public class AccountDAOImpl implements AccountDAO {
 
             if (account instanceof CheckingAccount) {
                 CheckingAccount checkingAccount = (CheckingAccount) account;
-                String addCheckingAccountQuery = "INSERT INTO currentAccounts (accountNumber, overdraft_limit) VALUES (?, ?)";
+                String addCheckingAccountQuery = "INSERT INTO currentAccounts (accountNumber, overdraft) VALUES (?, ?)";
                 try (PreparedStatement ps = connection.prepareStatement(addCheckingAccountQuery)) {
                     ps.setInt(1, accountNumber);
                     ps.setDouble(2, checkingAccount.getOverdraftLimit());
@@ -91,7 +95,30 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public Account getAccount(int accountNumber) {
+    public List<Account> getAllAccount() {
+        List<Account> accounts = new ArrayList<>();
+        try{
+            String sql = "SELECT * FROM accounts";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+//            balance, creationDate, status, clientCode, employeeMatricule
+            while (resultSet.next()){
+                account.setBalance(resultSet.getInt("balance"));
+                account.setCreationDate(resultSet.getDate("creationDate").toLocalDate());
+                account.setStatus(AccountStatus.valueOf(resultSet.getString("status")) );
+                Client client = new Client();
+                client.setCode(resultSet.getInt("clientCode"));
+                account.setClient(client);
+
+                Employee employee = new Employee();
+                employee.setMatricule(resultSet.getInt("employeeMatricule"));
+                account.setEmployee(employee);
+                accounts.add(account);
+            }
+            return accounts;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -101,8 +128,189 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public void deleteAccount(int accountNumber) {
+    public Boolean deleteAccount(int accountNumber) {
+        try {
+            String sql = "DELETE FROM accounts WHERE accountNumber = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, accountNumber);
+            int affectedRows = preparedStatement.executeUpdate();
 
+            System.out.println("Number of affected rows: " + affectedRows);
+
+            if(affectedRows > 0){
+                return true;
+            }else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
+
+    @Override
+    public Account getAccountByNumber(int accountNumber) {
+        try{
+            String sql = "SELECT * FROM accounts WHERE accountNumber = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,accountNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                account.setAccountNumber(resultSet.getInt("accountNumber"));
+                account.setBalance(resultSet.getInt("balance"));
+                account.setCreationDate(resultSet.getDate("creationDate").toLocalDate());
+                account.setStatus(AccountStatus.valueOf(resultSet.getString("status")) );
+                Client client = new Client();
+                client.setCode(resultSet.getInt("clientCode"));
+                account.setClient(client);
+
+                Employee employee = new Employee();
+                employee.setMatricule(resultSet.getInt("employeeMatricule"));
+                account.setEmployee(employee);
+
+
+                // Create and return an Employee object
+                return account;
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Boolean updateAccountByStatus(Account account){
+        try {
+            String sql = "UPDATE accounts SET status=? WHERE accountNumber = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, account.getStatus().toString());
+            preparedStatement.setInt(2, account.getAccountNumber());
+
+            preparedStatement.executeUpdate();
+
+            int affectedRows = preparedStatement.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    @Override
+    public Account getAccountByClient(int code) {
+        try{
+            String sql = "SELECT * FROM accounts WHERE clientCode = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,code);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                account.setBalance(resultSet.getInt("balance"));
+                account.setCreationDate(resultSet.getDate("creationDate").toLocalDate());
+                account.setStatus(AccountStatus.valueOf(resultSet.getString("status")) );
+                Client client = new Client();
+                client.setCode(resultSet.getInt("clientCode"));
+                account.setClient(client);
+
+                Employee employee = new Employee();
+                employee.setMatricule(resultSet.getInt("employeeMatricule"));
+                account.setEmployee(employee);
+
+
+                // Create and return an Employee object
+                return account;
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    @Override
+    public List<Account> getAccountsByStatus(Account account1) {
+        ArrayList<Account> accounts = new ArrayList<>();
+        try{
+            String sql = "SELECT * FROM accounts WHERE status = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, account1.getStatus().toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                account.setBalance(resultSet.getInt("balance"));
+                account.setCreationDate(resultSet.getDate("creationDate").toLocalDate());
+                account.setStatus(AccountStatus.valueOf(resultSet.getString("status")) );
+                Client client = new Client();
+                client.setCode(resultSet.getInt("clientCode"));
+                account.setClient(client);
+
+                Employee employee = new Employee();
+                employee.setMatricule(resultSet.getInt("employeeMatricule"));
+                account.setEmployee(employee);
+
+                accounts.add(account);
+            }
+            return accounts;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+    @Override
+    public List<Account> getAccountsByDateCreation(Account account1) {
+        ArrayList<Account> accounts = new ArrayList<>();
+        try{
+            String sql = "SELECT * FROM accounts WHERE creationDate = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setDate(1, java.sql.Date.valueOf(account1.getCreationDate()));
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                account.setBalance(resultSet.getInt("balance"));
+                account.setCreationDate(resultSet.getDate("creationDate").toLocalDate());
+                account.setStatus(AccountStatus.valueOf(resultSet.getString("status")) );
+                Client client = new Client();
+                client.setCode(resultSet.getInt("clientCode"));
+                account.setClient(client);
+
+                Employee employee = new Employee();
+                employee.setMatricule(resultSet.getInt("employeeMatricule"));
+                account.setEmployee(employee);
+
+                accounts.add(account);
+            }
+            return accounts;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public Boolean updateAccountByBalance(Account account){
+        try {
+            String sql = "UPDATE accounts SET balance=? WHERE accountNumber = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setDouble(1, account.getBalance());
+            preparedStatement.setInt(2, account.getAccountNumber());
+
+            preparedStatement.executeUpdate();
+
+            int affectedRows = preparedStatement.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 }

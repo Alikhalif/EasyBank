@@ -3,6 +3,7 @@ import com.alibaba.connection.DB;
 import com.alibaba.controller.AccountController;
 import com.alibaba.controller.ClientController;
 import com.alibaba.controller.EmployeeController;
+import com.alibaba.controller.OperationController;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -16,6 +17,7 @@ public class Main {
         EmployeeController empc = new EmployeeController();
         ClientController cltc = new ClientController();
         AccountController accc = new AccountController();
+        OperationController opc = new OperationController();
 
         int choice;
 
@@ -34,12 +36,14 @@ public class Main {
                     "7  - Delete Client : \n" +
                     "8  - Update  Client : \n" +
                     "9  - Search Client by Code : \n" +
-                    "10 - Read book by status Borrowe : \n" +
-                    "11 - Search for Book : \n" +
-                    "12 - Borrowe Book : \n" +
-                    "13 - Return  Book Borrowed : \n" +
-                    "14 - Statistics : \n" +
-                    "15 - Report : \n" +
+
+                    "10 - Add Account : \n" +
+                    "11 - Read List Accounts : \n" +
+                    "12 - Delete Account : \n" +
+                    "13 - Update Account : \n" +
+
+                    "14 - Update Status Account : \n" +
+                    "15 - Search for account by code client : \n" +
 
                     "0 - exit.\n\n" +
                     "==> ");
@@ -98,34 +102,49 @@ public class Main {
                     break;
 
                 case 11 :
-                    System.out.println("1 - serch by title \n" +
-                            "2 - search by author \n");
-                    Scanner sc = new Scanner(System.in);
-                    int ch = sc.nextInt();
-                    if (ch == 1){
-                        System.out.println("serch book by title");
-                    } else if (ch == 2) {
-                        System.out.println("serch book by author");
-
-                    }
-
+                    System.out.println("****************** Read All Accounts");
+                    accc.AllAccount();
                     break;
 
                 case 12 :
-                    System.out.println("****************** Borrowe book");
+                    System.out.println("****************** Delete Account");
+                    accc.deleteAccount();
                     break;
 
                 case 13 :
-                    System.out.println("****************** Return  Book Borrowed ");
+                    System.out.println("****************** Update Account");
+
                     break;
 
                 case 14 :
-                    System.out.println("****************** Statistics ");
-
+                    System.out.println("****************** Update Status Account ");
+                    accc.updateStatusAccount();
                     break;
 
                 case 15 :
+                    System.out.println("***************** Search for account by cient code");
+                    accc.searchByClientCode();
                     break;
+
+                case 16 :
+                    System.out.println("***************** Select accounts by Status");
+                    accc.AllAccountByStatus();
+                    break;
+
+                case 17 :
+                    System.out.println("***************** Select accounts by date creation");
+                    accc.getAccountByDatecreation();
+                    break;
+
+                case 18 :
+                    System.out.println("***************** Add operation");
+                    opc.addOperation();
+                    break;
+
+//                case 19 :
+//                    System.out.println("***************** Add operation");
+//                    accc.getAccountByDatecreation();
+//                    break;
 
                 case 0:
                     System.out.println("Good by");
