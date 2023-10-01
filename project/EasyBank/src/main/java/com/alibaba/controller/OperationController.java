@@ -64,7 +64,39 @@ public class OperationController {
         }
 
 
+    }
 
+
+    public void SearchOperation(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter Number Operation : ");
+        int num = sc.nextInt();
+        Operation operation1 = operationDAO.getOperationByNumber(num);
+
+        if (operation1 != null) {
+            System.out.println("Client found:");
+            System.out.println("Number operation   :" + operation1.getOperationNumber());
+            System.out.println("Date creation      : " + operation1.getCreationDate());
+            System.out.println("Amount             : " + operation1.getAmount());
+            System.out.println("Type operation     : " + operation1.getOperationStatus());
+            System.out.println("Account number     : " + operation1.getAccount().getAccountNumber());
+            System.out.println("Omployee matricule : " + operation1.getEmployee().getMatricule());
+        } else {
+            System.out.println("Operation not found for numero: " + num);
+        }
+    }
+
+
+    public void deleteOperation(){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the number of the operation to delete: ");
+        int number = sc.nextInt();
+
+        if (operationDAO.operationDelete(number)) {
+            System.out.println("Operation deleted successfully");
+        } else {
+            System.out.println("Operation not found !");
+        }
     }
 
 

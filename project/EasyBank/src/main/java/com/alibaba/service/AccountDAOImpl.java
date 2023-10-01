@@ -103,6 +103,7 @@ public class AccountDAOImpl implements AccountDAO {
             ResultSet resultSet = statement.executeQuery(sql);
 //            balance, creationDate, status, clientCode, employeeMatricule
             while (resultSet.next()){
+                Account account = new Account();
                 account.setBalance(resultSet.getInt("balance"));
                 account.setCreationDate(resultSet.getDate("creationDate").toLocalDate());
                 account.setStatus(AccountStatus.valueOf(resultSet.getString("status")) );
@@ -240,6 +241,7 @@ public class AccountDAOImpl implements AccountDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
+                Account account = new Account();
                 account.setBalance(resultSet.getInt("balance"));
                 account.setCreationDate(resultSet.getDate("creationDate").toLocalDate());
                 account.setStatus(AccountStatus.valueOf(resultSet.getString("status")) );

@@ -69,6 +69,8 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             ResultSet resultSet = statement.executeQuery(sql);
 //            firstName, lastName, birthDate, email, phone, address, recruitmentDate
             while (resultSet.next()){
+                Employee emp = new Employee();
+                emp.setMatricule(resultSet.getInt("matricule"));
                 emp.setFirstName(resultSet.getString("firstName"));
                 emp.setLastName(resultSet.getString("lastName"));
                 emp.setDateOfBirth(resultSet.getDate("birthDate").toLocalDate());

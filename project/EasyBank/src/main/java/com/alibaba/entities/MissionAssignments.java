@@ -1,34 +1,38 @@
 package com.alibaba.entities;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class MissionAssignments {
-    private Date startDate;
-    private Date endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private Employee employee;
     private Mission mission;
 
+    public MissionAssignments() {
 
-    public MissionAssignments(Date startDate, Date endDate, Employee employee, Mission mission) {
+    }
+
+    public MissionAssignments(LocalDateTime startDate, LocalDateTime endDate, Employee employee, Mission mission) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.employee = employee;
         this.mission = mission;
     }
 
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 

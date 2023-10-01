@@ -70,6 +70,7 @@ public class ClientDAOImpl implements ClientDAO {
             ResultSet resultSet = statement.executeQuery(sql);
 //            firstName, lastName, birthDate, email, phone, address
             while (resultSet.next()){
+                Client client = new Client();
                 client.setCode(resultSet.getInt("code"));
                 client.setFirstName(resultSet.getString("firstName"));
                 client.setLastName(resultSet.getString("lastName"));
