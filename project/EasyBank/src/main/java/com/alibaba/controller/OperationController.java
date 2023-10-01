@@ -99,6 +99,25 @@ public class OperationController {
         }
     }
 
+    public void SearchAccountByOperation(){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the number of the operation : ");
+        int number = sc.nextInt();
+        if (number > 0){
+            Operation operation1 = operationDAO.getAccountByOperation(number);
+            if (operation1 != null){
+                System.out.println("Number account " + operation1.getAccount().getAccountNumber());
+                System.out.println("Balance: " + operation1.getAccount().getBalance());
+                System.out.println("Date creation: " +operation1.getAccount().getCreationDate());
+                System.out.println("Status: " + operation1.getAccount().getStatus());
+                System.out.println("Code client: " + operation1.getAccount().getClient().getCode());
+                System.out.println("Matricule : " + operation1.getAccount().getEmployee().getMatricule());
+            }else {
+                System.out.println("Not found !");
+            }
+        }
+    }
+
 
 
 }

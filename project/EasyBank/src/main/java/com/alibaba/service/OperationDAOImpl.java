@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OperationDAOImpl implements OperationDAO {
     private Connection connection = DB.getConnection();
@@ -80,5 +82,40 @@ public class OperationDAOImpl implements OperationDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+
+    @Override
+    public Operation getAccountByOperation(int numberOperation) {
+        try{
+            String sql = "SELECT * FROM operations OP join accounts AC on OP.accountNumber = AC.accountNumber WHERE OP.operationNumber = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,numberOperation);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                Operation operation1 = new Operation();
+                Account account = new Account();
+                account.setAccountNumber(resultSet.getInt("accountNumber"));
+                account.setBalance(resultSet.getInt("balance"));
+                account.setCreationDate(resultSet.getDate("creationDate").toLocalDate());
+                account.setStatus(AccountStatus.valueOf(resultSet.getString("status")) );
+                Client client = new Client();
+                client.setCode(resultSet.getInt("clientCode"));
+                account.setClient(client);
+
+                Employee employee = new Employee();
+                employee.setMatricule(resultSet.getInt("employeeMatricule"));
+                account.setEmployee(employee);
+                operation1.setAccount(account);
+                return operation1;
+                // Create and return an Employee object
+
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

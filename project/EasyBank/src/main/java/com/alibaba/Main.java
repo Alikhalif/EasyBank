@@ -54,7 +54,8 @@ public class Main {
                     "22 - Read All Mission \n" +
                     "23 - Delete Mission \n" +
                     "24 - Read All Mission Employee\n" +
-                    "25 - Mission Employee\n" +
+                    "25 - Search account by number operation\n" +
+                    "26 - Mission Employee\n" +
 
                     "0 - exit.\n\n" +
                     "==> ");
@@ -214,8 +215,11 @@ public class Main {
                     break;
 
                 case 25 :
+                    System.out.println("***************** Search account by number operation");
+                    opc.SearchAccountByOperation();
+                    break;
+                case 26 :
                     System.out.println("***************** Mission Statistic ");
-
                     break;
 
 
