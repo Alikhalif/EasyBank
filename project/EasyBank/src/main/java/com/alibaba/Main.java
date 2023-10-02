@@ -220,6 +220,7 @@ public class Main {
                     break;
                 case 26 :
                     System.out.println("***************** Mission Statistic ");
+                    assignmentsController.StatisticMission();
                     break;
 
 

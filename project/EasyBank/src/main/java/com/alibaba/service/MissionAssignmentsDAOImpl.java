@@ -6,7 +6,9 @@ import com.alibaba.entities.*;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MissionAssignmentsDAOImpl implements MissionEmployeeDAO {
     Connection connection = DB.getConnection();
@@ -56,7 +58,6 @@ public class MissionAssignmentsDAOImpl implements MissionEmployeeDAO {
                 assignments.setMission(mission);
 
                 missionAssignmentsList.add(assignments);
-                // Create and return an Employee object
 
             }
             return missionAssignmentsList;
@@ -65,6 +66,41 @@ public class MissionAssignmentsDAOImpl implements MissionEmployeeDAO {
         }
         return null;
     }
+
+
+
+    @Override
+    public Map<Integer, MissionAssignments> getCountMission() {
+        Map<Integer,MissionAssignments> missionAssignmentsList = new HashMap<>();
+        try{
+            String sql = "SELECT ma.mission_code, m.nom, COUNT(*) AS count_mission\n" +
+                    "FROM missionAssignments ma\n" +
+                    "JOIN missions m ON ma.mission_code = m.code\n" +
+                    "GROUP BY ma.mission_code, m.nom \n";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                MissionAssignments assignments = new MissionAssignments();
+
+                Mission mission = new Mission();
+
+                int count_mission = resultSet.getInt("count_mission");
+                mission.setCode(resultSet.getInt("mission_code"));
+                mission.setName(resultSet.getString("nom"));
+                assignments.setMission(mission);
+
+                missionAssignmentsList.put(count_mission,assignments);
+
+            }
+            return missionAssignmentsList;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 
 
 

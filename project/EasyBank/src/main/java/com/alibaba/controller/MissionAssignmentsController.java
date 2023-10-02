@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class MissionAssignmentsController {
@@ -49,6 +50,19 @@ public class MissionAssignmentsController {
         List<MissionAssignments> assignments = missionAssignmentsDAO.getMissionEmployee(matricule);
         for(MissionAssignments assignments1 : assignments){
             System.out.println(assignments1.getMission().getName()+" | "+assignments1.getStartDate()+" | "+assignments1.getEndDate()+" | "+assignments1.getEmployee().getMatricule()+" | "+assignments1.getMission().getCode());
+        }
+    }
+
+    public void StatisticMission(){
+        Map<Integer,MissionAssignments> missionAssignmentsList = missionAssignmentsDAO.getCountMission();
+        for (Map.Entry<Integer, MissionAssignments> entry : missionAssignmentsList.entrySet()){
+            Integer count_mission = entry.getKey();
+            MissionAssignments assignments = entry.getValue();
+            int code = assignments.getMission().getCode();
+            String nom = assignments.getMission().getName();
+
+            System.out.println("code : "+code+" | nom : "+nom+" | count : "+count_mission);
+
         }
     }
 

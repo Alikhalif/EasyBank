@@ -104,6 +104,7 @@ public class AccountDAOImpl implements AccountDAO {
 //            balance, creationDate, status, clientCode, employeeMatricule
             while (resultSet.next()){
                 Account account = new Account();
+                account.setAccountNumber(resultSet.getInt("accountNumber"));
                 account.setBalance(resultSet.getInt("balance"));
                 account.setCreationDate(resultSet.getDate("creationDate").toLocalDate());
                 account.setStatus(AccountStatus.valueOf(resultSet.getString("status")) );

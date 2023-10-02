@@ -133,8 +133,11 @@ public class DB {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS missionAssignments ("
                 + "debut_date TIMESTAMP,"
                 + "end_date TIMESTAMP,"
-                + "employee_matricule INT REFERENCES employees(matricule),"
-                + "mission_code INT PRIMARY KEY REFERENCES missions(code)"
+                + "employee_matricule INT,"
+                + "mission_code INT,"
+                + "PRIMARY KEY (employee_matricule, mission_code, end_date),"
+                + "FOREIGN KEY (employee_matricule) REFERENCES employees(matricule),"
+                + "FOREIGN KEY (mission_code) REFERENCES missions(code)"
                 + ");";
         try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(createTableSQL);

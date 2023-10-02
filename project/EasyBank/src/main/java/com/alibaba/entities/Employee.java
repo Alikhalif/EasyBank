@@ -6,7 +6,7 @@ import java.util.List;
 public class Employee extends Person {
     private int matricule;
     private LocalDate dateOfRecruitment;
-    private List<Mission> missions;/////////////
+    private List<Mission> missions;
     private List<Operation> operations;
     private List<Account> accounts;
 
