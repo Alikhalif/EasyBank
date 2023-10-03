@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 
 public class AccountDAOImpl implements AccountDAO {
@@ -314,6 +315,100 @@ public class AccountDAOImpl implements AccountDAO {
             return false;
         }
     }
+
+    @Override
+    public SavingsAccount getSavingsAccount(int accountNumber){
+        try{
+            SavingsAccount savingsAccount = new SavingsAccount();
+            String sql = "SELECT * FROM savingsAccounts WHERE accountNumber = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,accountNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                savingsAccount.setAccountNumber(resultSet.getInt("accountNumber"));
+                savingsAccount.setInterestRate(resultSet.getDouble("interestRate"));
+
+                return savingsAccount;
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    @Override
+    public CheckingAccount getCheckingAccount(int accountNumber){
+        try{
+            CheckingAccount checkingAccount = new CheckingAccount();
+            String sql = "SELECT * FROM currentAccounts WHERE accountNumber = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,accountNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                checkingAccount.setAccountNumber(resultSet.getInt("accountNumber"));
+                checkingAccount.setOverdraftLimit(resultSet.getDouble("overdraft"));
+
+                return checkingAccount;
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Optional<SavingsAccount> updateSavingsAccount(SavingsAccount savingsAccount){
+        try {
+            String sql = "UPDATE savingsAccounts SET interestRate=? WHERE accountNumber = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setDouble(1, savingsAccount.getInterestRate());
+            preparedStatement.setInt(2, savingsAccount.getAccountNumber());
+
+            int affectationRow = preparedStatement.executeUpdate();
+            if (affectationRow > 0){
+                return Optional.of(savingsAccount);
+            }else {
+                return Optional.empty();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+
+    @Override
+    public Optional<CheckingAccount> updateCheckingAccount(CheckingAccount checkingAccount){
+        try {
+            String sql = "UPDATE currentAccounts SET overdraft=? WHERE accountNumber = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setDouble(1, checkingAccount.getOverdraftLimit());
+            preparedStatement.setInt(2, checkingAccount.getAccountNumber());
+
+            int affectationRow = preparedStatement.executeUpdate();
+            if (affectationRow > 0){
+                return Optional.of(checkingAccount);
+            }else {
+                return Optional.empty();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+
+
+    //@Override
+
+
 
 
 }
