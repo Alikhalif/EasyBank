@@ -5,11 +5,11 @@ import com.alibaba.service.AccountDAOImpl;
 import com.alibaba.service.ClientDAOImpl;
 import com.alibaba.service.EmployeeDAOImpl;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.Optional;
 
 public class AccountController {
     Account account = new Account();
@@ -296,5 +296,59 @@ public class AccountController {
 
         return false;
     }
+
+
+    public void updateAcccount(){
+        Scanner sc = new Scanner(System.in);
+
+        boolean validAccountNumber = false;
+        int accountNumber = 0;
+
+        while (!validAccountNumber) {
+            try {
+                System.out.println("Enter the account number you want to update: ");
+                accountNumber = sc.nextInt();
+                validAccountNumber = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid account number format. Please enter a valid integer.");
+                sc.nextLine();
+            }
+        }
+        try{
+            Optional<Account> optionalAccount = Optional.ofNullable(seracc.getAccountByNumber(accountNumber));
+            if(optionalAccount.isPresent()){
+                System.out.println("Enter updated balance: ");
+                double updatedBalance = sc.nextDouble();
+
+                Account Updateaccount = optionalAccount.get();
+
+                Updateaccount.setBalance(updatedBalance);
+                seracc.updateAccount(Updateaccount);
+
+                if (seracc.getSavingsAccount(accountNumber) != null){
+                    Optional<SavingsAccount> savingsAccountOptional = seracc.updateSavingsAccount(seracc.getSavingsAccount(accountNumber));
+                    if (savingsAccountOptional.isPresent()){
+                        System.out.println("Saving account update successfuly");
+                    }else {
+                        System.out.println("Failed to update Saving account !");
+                    }
+
+                }else {
+                    Optional<CheckingAccount> optionalCheckingAccount = seracc.updateCheckingAccount(seracc.getCheckingAccount(accountNumber));
+                    if (optionalCheckingAccount.isPresent()){
+                        System.out.println("Saving account update successfuly");
+                    }else {
+                        System.out.println("Failed to update Saving account !");
+                    }
+                }
+            }
+
+        }catch (Exception e){
+
+        }
+
+    }
+
+
 
 }
